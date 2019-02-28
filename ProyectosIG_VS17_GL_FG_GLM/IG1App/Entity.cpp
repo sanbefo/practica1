@@ -7,6 +7,10 @@ using namespace glm;
 
 //-------------------------------------------------------------------------
 
+void Entity::update()
+{
+}
+
 void Entity::uploadMvM(dmat4 const& modelViewMat) const
 { 
 	dmat4 aMat = modelViewMat * modelMat;
@@ -33,12 +37,23 @@ Dragon::Dragon(GLuint numVert) : Entity()
 
 Triangulo::Triangulo(GLdouble r) : Entity()
 {
-	mesh = Mesh::generaTrianguloRGB(r);
+	mesh = Mesh::generaTrianguloAnimado(r);
 }
 
 Rectangulo::Rectangulo(GLdouble w, GLdouble h) : Entity()
 {
 	mesh = Mesh::generaRectanguloRGB(w, h);
+}
+
+Suelo::Suelo(GLdouble w, GLdouble h) : Entity()
+{
+	mesh = Mesh::generaSuelo(w, h);
+}
+
+Suelo::Suelo(GLdouble w, GLdouble h, GLuint rw, GLuint rh) : Entity()
+{
+	mesh = Mesh::generaRectanguloTexCor(w, h, rw, rh);
+	textura.load("bmp\\baldosaC.bmp");
 }
 
 Estrella3D::Estrella3D(GLdouble re, GLdouble np, GLdouble h) : Entity()  // dvec3 pos
@@ -75,6 +90,11 @@ Triangulo::~Triangulo()
 };
 
 Rectangulo::~Rectangulo()
+{
+	delete mesh; mesh = nullptr;
+};
+
+Suelo::~Suelo()
 {
 	delete mesh; mesh = nullptr;
 };
@@ -118,7 +138,7 @@ void Dragon::render(Camera const& cam)
 	if (mesh != nullptr) {
 
 		dmat4 matAux = cam.getViewMat();
-//		matAux = scale(matAux, dvec3(-40, -170, 0));
+		matAux = scale(matAux, dvec3(40, 40, 0));
 		uploadMvM(matAux);
 		glLineWidth(2);
 		glColor3d(0, 0, 1);
@@ -133,24 +153,42 @@ void Dragon::render(Camera const& cam)
 void Triangulo::render(Camera const& cam)
 {
 	if (mesh != nullptr) {
+		dmat4 mat = modelMat;
+		double x = 100 * cos(radians(anguloTraslada));
+		double y = 100 * sin(radians(anguloTraslada));
+		modelMat = translate(modelMat, dvec3(x, y, 0));
 		uploadMvM(cam.getViewMat());
-		//glPolygonMode(GL_BACK, GL_LINE);
-		//glPolygonMode(GL_BACK, GL_POINT);
-//		glColor3d(0, 0, 1);
+		modelMat = rotate(modelMat, radians(anguloRota), dvec3(0, 0, 1));
+		uploadMvM(cam.getViewMat());
 		mesh->render();
-		/*glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
+		modelMat = mat;
 	}
+}
+
+void Triangulo::update()
+{
+	anguloRota += 3;
+	anguloTraslada += 3;
 }
 
 void Rectangulo::render(Camera const& cam)
 {
 	if (mesh != nullptr) {
-		dmat4 mat = modelMat;
-		modelMat = mat;
-		modelMat = rotate(mat, radians(90.0), dvec3(1, 0, 0));
+		//dmat4 mat = modelMat;
+		//modelMat = mat;
+		//modelMat = rotate(mat, radians(90.0), dvec3(1, 0, 0));
 		uploadMvM(cam.getViewMat());
 		glColor3d(0, 0, 1);
-		modelMat = mat;
+//		modelMat = mat;
+		mesh->render();
+	}
+}
+
+void Suelo::render(Camera const& cam)
+{
+	if (mesh != nullptr) {
+		uploadMvM(cam.getViewMat());
+		glColor3d(0, 0, 1);
 		mesh->render();
 	}
 }
@@ -159,18 +197,27 @@ void Estrella3D::render(Camera const& cam)
 {
 	if (mesh != nullptr) {
 		dmat4 mat = modelMat;
+		modelMat = translate(mat, dvec3(0, 100, 0));
+
+		modelMat = rotate(modelMat, radians(anguloRota), dvec3(0, 1, 0));
+		modelMat = rotate(modelMat, radians(anguloRota), dvec3(0, 0, 1));
 		uploadMvM(cam.getViewMat());
-		glLineWidth(2);
-		glColor3d(1, 0, 0);
+		glLineWidth(1);
 		mesh->render();
-		modelMat = rotate(mat, radians(180.0), dvec3(1, 0, 0));
+		modelMat = rotate(modelMat, radians(180.0), dvec3(1, 0, 0));
 		uploadMvM(cam.getViewMat());
 		mesh->render();
-		glLineWidth(2);
+		glLineWidth(1);
 		glColor3d(0, 1, 1);
-		modelMat = mat;
+				
 		mesh->render();
+		modelMat = mat;
 	}
+}
+
+void Estrella3D::update()
+{
+	anguloRota++;
 }
 
 void Caja::render(Camera const& cam)

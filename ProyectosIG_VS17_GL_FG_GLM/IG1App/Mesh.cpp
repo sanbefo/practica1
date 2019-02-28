@@ -8,6 +8,7 @@ Mesh ::~Mesh(void)
 {
   delete[] vertices;  vertices = nullptr;
   delete[] colors;    colors = nullptr;
+  delete[] textures;    textures = nullptr;
 }
 //-------------------------------------------------------------------------
 
@@ -20,7 +21,11 @@ void Mesh::render()
       glEnableClientState(GL_COLOR_ARRAY);
       glColorPointer(4, GL_DOUBLE, 0, colors);   // number of coordinates per color, type of each coordinate, stride, pointer 
     }
-	
+	if (textures != nullptr) {
+		glEnableClientState(GL_TEXTURE_COORD_ARRAY);
+		glTexCoordPointer(2, GL_DOUBLE, 0, textures);
+	}
+
     glDrawArrays(primitive, 0, numVertices);   // primitive graphic, first index and number of elements to be rendered
 
 	glDisableClientState(GL_TEXTURE_COORD_ARRAY);
@@ -153,6 +158,17 @@ Mesh * Mesh::generaTrianguloRGB(GLdouble r)
 	return m;
 }
 
+Mesh * Mesh::generaTrianguloAnimado(GLdouble r)
+{
+	Mesh * m = generaTriangulo(r);
+	m->colors = new dvec4[m->numVertices];
+	m->colors[0] = dvec4(1.0, 0.0, 0.0, 1.0);
+	m->colors[1] = dvec4(1.0, 0.0, 0.0, 1.0);
+	m->colors[2] = dvec4(1.0, 0.0, 0.0, 1.0);
+
+	return m;
+}
+
 Mesh * Mesh::generaRectangulo(GLdouble w, GLdouble h)
 {
 	Mesh* m = new Mesh();
@@ -163,6 +179,34 @@ Mesh * Mesh::generaRectangulo(GLdouble w, GLdouble h)
 
 	m->vertices[0] = dvec3(0.0, h, 0.0);
 	m->vertices[1] = dvec3(w, h, 0.0);
+	m->vertices[2] = dvec3(0.0, 0.0, 0.0);
+	m->vertices[3] = dvec3(w, 0.0, 0.0);
+
+	return m;
+}
+
+Mesh * Mesh::generaRectanguloTexCor(GLdouble w, GLdouble h, GLuint rw, GLuint rh)
+{
+	Mesh *m = generaSuelo(w, h);
+	m->textures = new dvec2[m->numVertices];
+	m->textures[0] = dvec2(0, rh);
+	m->textures[1] = dvec2(0, 0);
+	m->textures[2] = dvec2(rw, rh);
+	m->textures[3] = dvec2(rw, 0);
+
+	return m;
+}
+
+Mesh * Mesh::generaSuelo(GLdouble w, GLdouble h)
+{
+	Mesh* m = new Mesh();
+	m->primitive = GL_TRIANGLE_STRIP;
+	m->numVertices = 4;
+
+	m->vertices = new dvec3[m->numVertices];
+
+	m->vertices[0] = dvec3(0.0, 0.0, h);
+	m->vertices[1] = dvec3(w, 0.0, h);
 	m->vertices[2] = dvec3(0.0, 0.0, 0.0);
 	m->vertices[3] = dvec3(w, 0.0, 0.0);
 

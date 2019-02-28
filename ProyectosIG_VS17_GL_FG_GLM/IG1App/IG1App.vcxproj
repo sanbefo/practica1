@@ -122,7 +122,9 @@
   <ItemGroup>
     <ClInclude Include="Camera.h" />
     <ClInclude Include="Entity.h" />
+    <ClInclude Include="Texture.h" />
     <ClInclude Include="Mesh.h" />
+    <ClInclude Include="Pixmap32RGBA.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="Viewport.h" />
   </ItemGroup>
@@ -131,7 +133,9 @@
     <ClCompile Include="Entity.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Mesh.cpp" />
+    <ClCompile Include="Pixmap32RGBA.cpp" />
     <ClCompile Include="Scene.cpp" />
+    <ClCompile Include="Texture.cpp" />
     <ClCompile Include="Viewport.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
