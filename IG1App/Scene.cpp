@@ -17,8 +17,10 @@ void Scene::init()
   // meshes
 
   // Graphics objects (entities) of the scene
-//  grObjects.push_back(new EjesRGB(200.0)); 
-  grObjects.push_back(new Poliespiral(glm::dvec2(0, 0), 0, 160, 1, 10, 50));
+  //  grObjects.push_back(new EjesRGB(200.0));
+  //  grObjects.push_back(new Poliespiral(glm::dvec2(0, 0), 0, 160, 1, 10, 50));
+//  grObjects.push_back(new Dragon(3000));
+  grObjects.push_back(new Triangulo(40));
 }
 //-------------------------------------------------------------------------
 
@@ -40,4 +42,3 @@ void Scene::render(Camera const& cam)
 	}
 }
 //-------------------------------------------------------------------------
-

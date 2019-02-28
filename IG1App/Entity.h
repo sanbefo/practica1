@@ -41,7 +41,7 @@ public:
 	~EjesRGB();
 	virtual void render(Camera const& cam); 
 };
-
+//-------------------------------------------------------------------------
 class Poliespiral : public Entity
 {
 public:
@@ -50,5 +50,19 @@ public:
 	virtual void render(Camera const& cam);
 };
 //-------------------------------------------------------------------------
-
+class Dragon : public Entity
+{
+public:
+	Dragon(GLuint numVert);
+	~Dragon();
+	virtual void render(Camera const& cam);
+};
+//-------------------------------------------------------------------------
+class Triangulo : public Entity
+{
+public:
+	Triangulo(GLdouble r);
+	~Triangulo();
+	virtual void render(Camera const& cam);
+};
 #endif //_H_Entities_H_

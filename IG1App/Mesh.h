@@ -18,9 +18,16 @@ public:
 
 	glm::dvec3* getVertices() { return vertices; };  // vertex array
 	glm::dvec4* getColors() { return colors; };      // color array
- 
+
+	// POLIESPIRAL
 	static Mesh* generaPoliespiral(glm::dvec2 verIni, GLdouble angIni, GLdouble incrAng, GLdouble ladoIni, GLdouble incrLado, GLuint numVert);
 
+	// DRAGON
+	static Mesh* generaDragon(GLuint numVert);
+
+	// TRIANGULO
+	static Mesh* generaTriangulo(GLdouble r);
+	static Mesh* generaTrianguloRGB(GLdouble r);
 protected:
 
 	GLuint numVertices = 0;   // arrays size (number of elements)

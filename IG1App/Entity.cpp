@@ -21,11 +21,20 @@ EjesRGB::EjesRGB(GLdouble l): Entity()
   mesh = Mesh::createRGBAxes(l);
 }
 
-Poliespiral::Poliespiral(glm::dvec2 verIni, GLdouble angIni, GLdouble incrAng, GLdouble ladoIni, GLdouble incrLado, GLuint numVert): Entity()
+Poliespiral::Poliespiral(glm::dvec2 verIni, GLdouble angIni, GLdouble incrAng, GLdouble ladoIni, GLdouble incrLado, GLuint numVert) : Entity()
 {
 	mesh = Mesh::generaPoliespiral(verIni, angIni, incrAng, ladoIni, incrLado, numVert);
 }
 
+Dragon::Dragon(GLuint numVert) : Entity()
+{
+	mesh = Mesh::generaDragon(numVert);
+}
+
+Triangulo::Triangulo(GLdouble r) : Entity()
+{
+	mesh = Mesh::generaTriangulo(r);
+}
 //-------------------------------------------------------------------------
 
 EjesRGB::~EjesRGB() 
@@ -34,6 +43,16 @@ EjesRGB::~EjesRGB()
 };
 
 Poliespiral::~Poliespiral()
+{
+	delete mesh; mesh = nullptr;
+};
+
+Dragon::~Dragon()
+{
+	delete mesh; mesh = nullptr;
+};
+
+Triangulo::~Triangulo()
 {
 	delete mesh; mesh = nullptr;
 };
@@ -49,6 +68,7 @@ void EjesRGB::render(Camera const& cam)
 	}
 }
 
+//-------------------------------------------------------------------------
 void Poliespiral::render(Camera const& cam)
 {
 	if (mesh != nullptr) {
@@ -61,3 +81,30 @@ void Poliespiral::render(Camera const& cam)
 	}
 }
 //-------------------------------------------------------------------------
+void Dragon::render(Camera const& cam)
+{
+	if (mesh != nullptr) {
+
+		dmat4 matAux = cam.getViewMat();
+//		matAux = scale(matAux, dvec3(-40, -170, 0));
+		uploadMvM(matAux);
+		glLineWidth(2);
+		glColor3d(0, 0, 1);
+		glPointSize(2);
+		mesh->render();
+		glLineWidth(1);
+		glColor3d(1, 1, 1);
+		glPointSize(1);
+	}
+}
+
+void Triangulo::render(Camera const& cam)
+{
+	if (mesh != nullptr) {
+		uploadMvM(cam.getViewMat());
+		glLineWidth(2);
+		glColor3d(0, 0, 1);
+		mesh->render();
+		glLineWidth(1);
+	}
+}
