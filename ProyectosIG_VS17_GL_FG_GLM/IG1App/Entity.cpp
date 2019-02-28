@@ -145,8 +145,12 @@ void Triangulo::render(Camera const& cam)
 void Rectangulo::render(Camera const& cam)
 {
 	if (mesh != nullptr) {
+		dmat4 mat = modelMat;
+		modelMat = mat;
+		modelMat = rotate(mat, radians(90.0), dvec3(1, 0, 0));
 		uploadMvM(cam.getViewMat());
 		glColor3d(0, 0, 1);
+		modelMat = mat;
 		mesh->render();
 	}
 }
@@ -161,11 +165,6 @@ void Estrella3D::render(Camera const& cam)
 		mesh->render();
 		modelMat = rotate(mat, radians(180.0), dvec3(1, 0, 0));
 		uploadMvM(cam.getViewMat());
-		glLineWidth(2);
-		glColor3d(1, 1, 0);
-		mesh->render();
-		modelMat = rotate(mat, radians(270.0), dvec3(1, 1, 0));
-		uploadMvM(cam.getViewMat());
 		mesh->render();
 		glLineWidth(2);
 		glColor3d(0, 1, 1);
@@ -177,10 +176,13 @@ void Estrella3D::render(Camera const& cam)
 void Caja::render(Camera const& cam)
 {
 	if (mesh != nullptr) {
+		dmat4 mat = modelMat;
+		modelMat = translate(mat, dvec3(0, 50, 0));
 		uploadMvM(cam.getViewMat());
 		glLineWidth(2);
 		glColor3d(1, 0, 1);
 		mesh->render();
+		modelMat = mat;
 		glLineWidth(1);
 		glColor3d(0, 0, 1);
 	}

@@ -21,7 +21,7 @@ void Scene::init()
   //  grObjects.push_back(new Poliespiral(glm::dvec2(0, 0), 0, 160, 1, 10, 50));
 //  grObjects.push_back(new Dragon(3000));
 //  grObjects.push_back(new Triangulo(40));
-//  grObjects.push_back(new Rectangulo(100, 60));
+  grObjects.push_back(new Rectangulo(300, 250));
   grObjects.push_back(new Estrella3D(100, 6, 100));  // dvec3(0, 150, 0)
   grObjects.push_back(new Caja(100));
 }
