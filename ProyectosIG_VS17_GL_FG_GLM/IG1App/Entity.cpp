@@ -53,19 +53,27 @@ Suelo::Suelo(GLdouble w, GLdouble h) : Entity()
 Suelo::Suelo(GLdouble w, GLdouble h, GLuint rw, GLuint rh) : Entity()
 {
 	mesh = Mesh::generaRectanguloTexCor(w, h, rw, rh);
-	textura.load("bmp\\baldosaC.bmp");
+	textura.load("..\\Bmps\\baldosaC.bmp");
 }
 
-Estrella3D::Estrella3D(GLdouble re, GLdouble np, GLdouble h) : Entity()  // dvec3 pos
-{
-	mesh = Mesh::generaEstrella3D(re, np, h);
+//Estrella3D::Estrella3D(GLdouble re, GLdouble np, GLdouble h) : Entity()  // dvec3 pos
+//{
+//	mesh = Mesh::generaEstrella3D(re, np, h);
+//	modelMat = translate(modelMat, dvec3(0, 100, 0));
+//}
 
+Estrella3D::Estrella3D(GLdouble r, GLdouble nL, GLdouble h) : Entity()
+{
+	mesh = Mesh::generaEstrellaTexCor(r, nL, h);
 	modelMat = translate(modelMat, dvec3(0, 100, 0));
+	textura.load("..\\Bmps\\baldosaP.bmp");
 }
 
 Caja::Caja(GLdouble l) : Entity()
 {
-	mesh = Mesh::generaContCubo(l);
+	mesh = Mesh::generaCajaTexCor(l);
+	textura.load("..\\Bmps\\container.bmp");
+	texturaInner.load("..\\Bmps\\papelE.bmp");
 }
 //-------------------------------------------------------------------------
 
@@ -174,12 +182,8 @@ void Triangulo::update()
 void Rectangulo::render(Camera const& cam)
 {
 	if (mesh != nullptr) {
-		//dmat4 mat = modelMat;
-		//modelMat = mat;
-		//modelMat = rotate(mat, radians(90.0), dvec3(1, 0, 0));
 		uploadMvM(cam.getViewMat());
 		glColor3d(0, 0, 1);
-//		modelMat = mat;
 		mesh->render();
 	}
 }
@@ -188,8 +192,9 @@ void Suelo::render(Camera const& cam)
 {
 	if (mesh != nullptr) {
 		uploadMvM(cam.getViewMat());
-		glColor3d(0, 0, 1);
+		textura.bind();
 		mesh->render();
+		textura.unbind();
 	}
 }
 
@@ -203,15 +208,15 @@ void Estrella3D::render(Camera const& cam)
 		modelMat = rotate(modelMat, radians(anguloRota), dvec3(0, 0, 1));
 		uploadMvM(cam.getViewMat());
 		glLineWidth(1);
+		textura.bind();
 		mesh->render();
 		modelMat = rotate(modelMat, radians(180.0), dvec3(1, 0, 0));
 		uploadMvM(cam.getViewMat());
 		mesh->render();
 		glLineWidth(1);
-		glColor3d(0, 1, 1);
-				
 		mesh->render();
 		modelMat = mat;
+		textura.unbind();
 	}
 }
 
@@ -227,10 +232,21 @@ void Caja::render(Camera const& cam)
 		modelMat = translate(mat, dvec3(0, 50, 0));
 		uploadMvM(cam.getViewMat());
 		glLineWidth(2);
-		glColor3d(1, 0, 1);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_BACK);
+		textura.bind();
+		mesh->render();
+		textura.unbind();
+		glDisable(GL_CULL_FACE);
+		glEnable(GL_CULL_FACE);
+		glCullFace(GL_FRONT);
+		texturaInner.bind();
 		mesh->render();
 		modelMat = mat;
 		glLineWidth(1);
-		glColor3d(0, 0, 1);
+		texturaInner.unbind();
+		glDisable(GL_CULL_FACE);
 	}
 }
+
+//glCullFace(GL_FRONT / GL_BACK);

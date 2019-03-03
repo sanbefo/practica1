@@ -243,15 +243,39 @@ Mesh * Mesh::generaEstrella3D(GLdouble re, GLdouble np, GLdouble h)
 	{
 		double z = 1;
 		if (i % 2 == 0)
-		{
 			z = 2;
-		}
 		x = (re / z) * cos(radians(ang));
 		y = (re / z) * sin(radians(ang));
 		m->vertices[i] = dvec3(x, y, h);
 		ang += 360 / (m->numVertices - 2);
 	}
 	m->vertices[m->numVertices - 1] = m->vertices[1];
+
+	return m;
+}
+
+Mesh * Mesh::generaEstrellaTexCor(GLdouble r, GLdouble nL, GLdouble h)
+{
+	Mesh *m = generaEstrella3D(r, nL, h);
+	m->numVertices = 2 * nL + 2;
+	m->textures = new dvec2[m->numVertices];
+	double x = 30;
+	double y = 30;
+	double ang = 0;
+
+	m->textures[0] = dvec2(0.0, 0.0);
+
+	for (int i = 1; i < m->numVertices - 1; i++)
+	{
+		double z = 0.5;
+		if (i % 2 == 0)
+			z = 0.25;
+		x = z * cos(radians(ang));
+		y = z * sin(radians(ang));
+		m->textures[i] = dvec2(x, y);
+		ang += 360 / (m->numVertices - 2);
+	}
+	m->textures[m->numVertices - 1] = m->textures[1];
 
 	return m;
 }
@@ -263,7 +287,7 @@ Mesh * Mesh::generaContCubo(GLdouble l)
 	m->numVertices = 10;
 
 	m->vertices = new dvec3[m->numVertices];
-	double x = l/2;
+	double x = l / 2;
 
 	m->vertices[0] = dvec3(-x, x, -x);
 	m->vertices[1] = dvec3(-x, -x, -x); 
@@ -276,5 +300,24 @@ Mesh * Mesh::generaContCubo(GLdouble l)
 	m->vertices[8] = m->vertices[0];
 	m->vertices[9] = m->vertices[1];
 
+	return m;
+}
+
+Mesh * Mesh::generaCajaTexCor(GLdouble l)
+{
+	Mesh *m = generaContCubo(l);
+
+	m->textures = new dvec2[m->numVertices];
+	double x = 1;
+	m->textures[0] = dvec2(0, 0);
+	m->textures[1] = dvec2(1, 0);
+	m->textures[2] = dvec2(0, 1);
+	m->textures[3] = dvec2(1, 1);
+	m->textures[4] = dvec2(0, 0);
+	m->textures[5] = dvec2(1, 0);
+	m->textures[6] = dvec2(0, 1);
+	m->textures[7] = dvec2(1, 1);
+	m->textures[8] = m->textures[0];
+	m->textures[9] = m->textures[1];
 	return m;
 }

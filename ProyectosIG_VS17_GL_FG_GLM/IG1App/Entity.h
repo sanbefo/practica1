@@ -28,7 +28,7 @@ protected:
 
 	Mesh* mesh = nullptr;   // surface mesh
 	glm::dmat4 modelMat;    // modeling matrix
-	Texture textura;
+	Texture textura, texturaInner;
 
 	// transfers modelViewMat to the GPU
 	virtual void uploadMvM(glm::dmat4 const& modelViewMat) const;

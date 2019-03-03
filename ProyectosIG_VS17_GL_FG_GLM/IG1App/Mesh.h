@@ -39,9 +39,11 @@ public:
 
 	//ESTRELLA 3D
 	static Mesh* generaEstrella3D(GLdouble re, GLdouble np, GLdouble h);
+	static Mesh* generaEstrellaTexCor(GLdouble r, GLdouble nL, GLdouble h);
 
 	//CAJA
 	static Mesh* generaContCubo(GLdouble l);
+	static Mesh* generaCajaTexCor(GLdouble l);
 protected:
 
 	GLuint numVertices = 0;   // arrays size (number of elements)
